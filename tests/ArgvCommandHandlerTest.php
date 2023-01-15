@@ -23,13 +23,14 @@ class ArgvCommandHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('handle')
             ->with(
                 $this->equalTo(['verbose','overwrite']),
-                $this->equalTo(['log_file' => 'app.log'])
+                $this->equalTo(['log_file' => ['app.log']])
             );
 
         $argv = [
             'app.php',
             'command_name',
-            '{verbose,overwrite}',
+            'verbose',
+            'overwrite',
             '[log_file=app.log]'
         ];
 

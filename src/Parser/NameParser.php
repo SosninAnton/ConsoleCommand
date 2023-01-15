@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace SosninAnton\ConsoleCommand\Parser;
 
-use SosninAnton\ConsoleCommand\Exceptions\CommandParseException;
+use SosninAnton\ConsoleCommand\DTO\CommandDTO;
 
 class NameParser
 {
 
-    public function parse(string $input):string
+    public function parse(CommandDTO $commandDTO):CommandDTO
     {
-        $input = ltrim($input);
-        $pos = mb_strpos($input, ' ');
+        $tokens = $commandDTO->getTokens();
 
-        if ($pos === false) {
-            return $input;
-        }
+        $commandDTO->withName(array_shift($tokens))->withTokens($tokens);
 
-        return mb_substr($input, 0, $pos);
+        return $commandDTO;
     }
 }

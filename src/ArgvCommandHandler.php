@@ -40,9 +40,8 @@ class ArgvCommandHandler
             return implode(PHP_EOL, $result);
         }
 
-        $input = implode(' ', $argv);
 
-        $commandDTO = $this->commandParser->parse($input);
+        $commandDTO = $this->commandParser->parse($argv);
 
         return $this->commandHandler->handle(
             $commandDTO->getName(),

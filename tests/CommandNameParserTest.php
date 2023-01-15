@@ -3,6 +3,7 @@
 namespace SosninAnton\ConsoleCommand;
 
 use SosninAnton\ConsoleCommand\Contracts\Command;
+use SosninAnton\ConsoleCommand\DTO\CommandDTO;
 use sosninanton\consolecommand\Exceptions\CommandExecuteException;
 use SosninAnton\ConsoleCommand\Exceptions\CommandRegisterException;
 use SosninAnton\ConsoleCommand\Parser\NameParser;
@@ -23,22 +24,14 @@ class CommandNameParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetName($input, $name)
     {
-        $this->assertSame($this->commandNameParser->parse($input), $name);
+        $this->assertSame($this->commandNameParser->parse(new CommandDTO($input))->getName(), $name);
     }
 
     public function namesProvider()
     {
         return [
-            'only name' => ['name', 'name'],
-            'usual name' => ['name {arg}', 'name'],
-            'name with start spaces' => [' name {arg}', 'name'],
-            'real name' => [
-                'command_name {verbose,overwrite} [log_file=app.log] {unlimited}
-[methods={create,update,delete}] [paginate=50] {log}',
-                'command_name'
-            ],
+            'only name' => [['name'], 'name'],
+            'usual name' => [['name','{arg}'], 'name']
         ];
     }
-
-
 }

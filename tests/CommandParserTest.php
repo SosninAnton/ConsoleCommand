@@ -18,18 +18,18 @@ class CommandParserTest extends \PHPUnit\Framework\TestCase
     {
         $commandParser = new CommandParser();
 
-        $dto = $commandParser->parse('command_name {verbose} [paginate=50]');
+        $dto = $commandParser->parse(['command_name','{verbose}','[paginate=50]']);
 
         $this->assertEquals('command_name', $dto->getName());
         $this->assertEquals(['verbose'], $dto->getArguments());
-        $this->assertEquals(['paginate' => '50'], $dto->getOptions());
+        $this->assertEquals(['paginate' => ['50']], $dto->getOptions());
     }
 
     public function testParseCommandWithoutOptions()
     {
         $commandParser = new CommandParser();
 
-        $dto = $commandParser->parse('command_name {verbose}');
+        $dto = $commandParser->parse(['command_name','{verbose}']);
 
         $this->assertEquals('command_name', $dto->getName());
         $this->assertEquals(['verbose'], $dto->getArguments());
@@ -40,7 +40,7 @@ class CommandParserTest extends \PHPUnit\Framework\TestCase
     {
         $commandParser = new CommandParser();
 
-        $dto = $commandParser->parse('command_name');
+        $dto = $commandParser->parse(['command_name']);
 
         $this->assertEquals('command_name', $dto->getName());
         $this->assertEquals([], $dto->getArguments());

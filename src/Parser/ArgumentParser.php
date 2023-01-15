@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SosninAnton\ConsoleCommand\Parser;
 
+use SosninAnton\ConsoleCommand\DTO\CommandDTO;
 use SosninAnton\ConsoleCommand\Exceptions\CommandParseException;
 
 class ArgumentParser
@@ -12,21 +13,19 @@ class ArgumentParser
 
     private const END_WITH = '}';
 
-    private const SEPARATOR = ',';
 
-    public function parse(string $input):array
+    public function parse(CommandDTO $commandDTO):CommandDTO
     {
         $arguments = [];
 
-        $input = trim($input);
-
-        foreach (explode(' ', $input) as $token) {
+        foreach ($commandDTO->getTokens() as $token) {
             if (str_starts_with($token, self::START_WITH) &&
             str_ends_with($token, self::END_WITH)) {
                 $token = substr($token, 1, -1);
-                $arguments = array_merge($arguments, explode(self::SEPARATOR, $token));
             }
+            $arguments[] = $token;
         }
-        return array_unique($arguments);
+
+        return $commandDTO->withArguments($arguments)->withTokens([]);
     }
 }

@@ -3,6 +3,7 @@
 namespace SosninAnton\ConsoleCommand;
 
 use SosninAnton\ConsoleCommand\Contracts\Command;
+use SosninAnton\ConsoleCommand\DTO\CommandDTO;
 use sosninanton\consolecommand\Exceptions\CommandExecuteException;
 use SosninAnton\ConsoleCommand\Exceptions\CommandRegisterException;
 use SosninAnton\ConsoleCommand\Parser\ArgumentParser;
@@ -24,20 +25,16 @@ class CommandArgumentsParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetArguments($input, $arguments)
     {
-        $this->assertSame($arguments, $this->argumentsParser->parse($input));
+        $this->assertSame($this->argumentsParser->parse(new CommandDTO($input))->getArguments(), $arguments);
     }
 
     public function argumentsProvider()
     {
         return [
-            'one argument' => ['name {arg}', ['arg']],
-            'many arguments' => ['name {arg} {arg2} {arg3} {arg4,arg5,arg6}',
-                ['arg','arg2','arg3','arg4','arg5','arg6']
-            ],
-            'real example' => [
-                'command_name {verbose,overwrite} [log_file=app.log] {unlimited} [methods={create,update,delete}] [paginate=50] {log}',
-                ['verbose','overwrite','unlimited','log']
-            ],
+            'one argument' => [['{arg}'], ['arg']],
+            'many arguments' => [['{arg}','{arg2}','arg3'],
+                ['arg','arg2','arg3']
+            ]
         ];
     }
 }

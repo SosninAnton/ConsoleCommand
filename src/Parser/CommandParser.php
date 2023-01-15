@@ -19,15 +19,15 @@ class CommandParser
         $this->optionsParser = new OptionsParser();
     }
 
-    public function parse(string $input):CommandDTO
+    public function parse(array $tokens):CommandDTO
     {
-        $commandDTO = new CommandDTO();
-        $commandDTO
-            ->withName($this->nameParser->parse($input))
-            ->withArguments($this->argumentParser->parse($input))
-            ->withOptions($this->optionsParser->parse($input));
+        $commandDTO = new CommandDTO(tokens: $tokens);
 
-        return $commandDTO;
+        //TODO использовать Pipeline
+
+        $commandDTO = $this->nameParser->parse($commandDTO);
+        $commandDTO = $this->optionsParser->parse($commandDTO);
+        return $this->argumentParser->parse($commandDTO);
     }
 
 }

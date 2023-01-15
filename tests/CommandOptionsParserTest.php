@@ -3,6 +3,7 @@
 namespace SosninAnton\ConsoleCommand;
 
 use SosninAnton\ConsoleCommand\Contracts\Command;
+use SosninAnton\ConsoleCommand\DTO\CommandDTO;
 use sosninanton\consolecommand\Exceptions\CommandExecuteException;
 use SosninAnton\ConsoleCommand\Exceptions\CommandRegisterException;
 use SosninAnton\ConsoleCommand\Parser\ArgumentParser;
@@ -25,22 +26,18 @@ class CommandOptionsParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetArguments($input, $arguments)
     {
-        $this->assertSame($arguments, $this->optionsParser->parse($input));
+        $this->assertSame($arguments, $this->optionsParser->parse(new CommandDTO($input))->getOptions());
     }
 
     public function optionsProvider()
     {
         return [
-            'one option' => ['name [name=value]', ['name' => 'value']],
-            'two options' => ['name [name=value] [another_name=another_value]',
-                ['name' => 'value','another_name' => 'another_value']
+            'one option' => [['name','[name=value]'], ['name' => ['value']]],
+            'two options' => [['name','[name=value]','[another_name=another_value]'],
+                ['name' => ['value'],'another_name' => ['another_value']]
             ],
-            'option with two values' => ['name [name={value,another_value}]',
+            'option with two values' => [['name','[name=value]','[name=another_value]'],
                 ['name' => ['value','another_value']]
-            ],
-            'real example' => [
-                'command_name {verbose,overwrite} [log_file=app.log] {unlimited} [methods={create,update,delete}] [paginate=50] {log}',
-                ['log_file' => 'app.log','methods' => ['create','update','delete'],'paginate' => '50']
             ],
         ];
     }
