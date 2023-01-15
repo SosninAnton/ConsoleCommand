@@ -21,13 +21,12 @@ class CommandParser
 
     public function parse(array $tokens):CommandDTO
     {
-        $commandDTO = new CommandDTO(tokens: $tokens);
-
-        //TODO использовать Pipeline
-
-        $commandDTO = $this->nameParser->parse($commandDTO);
-        $commandDTO = $this->optionsParser->parse($commandDTO);
-        return $this->argumentParser->parse($commandDTO);
+        return  (new Pipeline())
+            ->pipe($this->nameParser)
+            ->pipe($this->optionsParser)
+            ->pipe($this->argumentParser)
+            ->via('parse')
+            ->send(new CommandDTO(tokens: $tokens))
+            ->thenReturn();
     }
-
 }
