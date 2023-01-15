@@ -5,15 +5,6 @@
 **Note:** ```i@sosnin-web.ru```  ```library for handling input arguments and parameters for custom uesr commands``` 
 
 
-
-## Install
-
-Via Composer
-
-``` bash
-$ composer require sosninanton/consolecommand
-```
-
 ## Usage
 
 ``` php
